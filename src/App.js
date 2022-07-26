@@ -1,3 +1,4 @@
+import React from 'react'
 import Note from './components/Note'
 import { useState } from 'react'
 
