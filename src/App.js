@@ -1,11 +1,26 @@
 import React from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
 import Note from './components/Note'
 import { useState } from 'react'
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes)
+const App = () => {
+  const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+
+  // 利用效果钩子来获取数据
+  // 两个参数，第一个参数：用于请求数据的函数，第二个参数：用于指定运行频率（[]代表只运行加载的第一次）
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }, [])
+  console.log('render', notes.length, 'notes')
 
   // 处理表单的提交内容
   const addNote = (event) =>{
