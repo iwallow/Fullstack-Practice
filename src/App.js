@@ -3,11 +3,28 @@ import { useEffect } from 'react'
 import Note from './components/Note'
 import { useState } from 'react'
 import noteService from './services/notes'
+import './index.css'
+import Notification from './components/Notification'
+
+
+const Footer = () => {
+  // 内联样式，React更推荐使用内联样式，这样可以将一个组件的所有内容汇总到一个文件当中
+  // 而不是将html, javascript, css三者单独分开
+  const footerStyle = {
+    color: 'green', 
+    fontStyle: 'italic', 
+    fontSize: 16
+  }
+  return (
+    <p style={footerStyle}>Note app, Department of Computer Science, University of Helsinki 2022 </p>
+  )
+}
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('some error happend ...')
 
   // 利用效果钩子来获取数据
   // 两个参数，第一个参数：用于请求数据的函数，第二个参数：用于指定运行频率（[]代表只运行加载的第一次）
@@ -70,7 +87,9 @@ const App = () => {
         setNotes(notes.map(note => note.id === id ? returnedNote : note ))
       })
       .catch(error =>{
-        alert('the note ' + note.content + 'was already delete from server')
+        // alert('the note ' + note.content + 'was already delete from server')
+        setErrorMessage(`Note '${note.content}' was already removed from server`)
+        setTimeout(() => { setErrorMessage(null) }, 5000)
         setNotes(notes.filter(n => n.id !== id))
       })
   }
@@ -79,7 +98,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-
+      <Notification message={errorMessage} />
       { /* 通过添加一个按钮，选择important的note输出 */ }
       <button onClick={() => setShowAll(!showAll)}>
         {showAll ? 'Show Important' : 'Show All'}
@@ -96,6 +115,8 @@ const App = () => {
         <input value={newNote} onChange={handleNoteChange}/>
         <button type='submit'>save</button>
       </form>
+
+      <Footer />
     </div>
   )
 }
