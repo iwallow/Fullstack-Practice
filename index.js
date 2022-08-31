@@ -20,7 +20,9 @@ let notes = [
 ]
 
 const express = require('express')
+const cors = require('cors')
 const app = express() 
+app.use(cors())
 
 // 用来解析JSON数据的中间件，如果不配置该功能的话，无法获取body中的JSON数据
 // ➡️是因为body中的数据是JSON格式，而不是JavaScript对象
@@ -101,7 +103,7 @@ const unknowEndpoint = (request, response) => {
 
 app.use(unknowEndpoint)
 
-const PORT = '3002'
+const PORT = process.env.PORT || '3002'
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
