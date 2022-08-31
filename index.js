@@ -23,6 +23,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express() 
 app.use(cors())
+app.use(express.static('build'))
 
 // 用来解析JSON数据的中间件，如果不配置该功能的话，无法获取body中的JSON数据
 // ➡️是因为body中的数据是JSON格式，而不是JavaScript对象
