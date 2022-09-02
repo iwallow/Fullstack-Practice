@@ -21,23 +21,25 @@ let notes = [
 
 const express = require('express')
 const cors = require('cors')
+const Note = require('./models/note')
+require('dotenv').config()
+
 const app = express() 
 app.use(cors())
 app.use(express.static('build'))
+
+
 
 // 用来解析JSON数据的中间件，如果不配置该功能的话，无法获取body中的JSON数据
 // ➡️是因为body中的数据是JSON格式，而不是JavaScript对象
 app.use(express.json())
 
-// 响应的content-type和状态码会被自动设置
-app.get('/', (request, response) => {
-    response.send('<h1>Hello World</h1>')
-})
-
 app.get('/api/notes', (request, response) => {
     // 通过向json()方法传入字符串的形式，使响应的content-type自动被设置为application/json
     // ※ JSON.stringify()返回的是字符串格式的JSON
-    response.json(notes)
+    Note.find({}).then(result => {
+        response.json(result)
+    })
 })
 
 app.get('/api/notes/:id', (request, response) => {
